@@ -1,8 +1,10 @@
 import { render, screen } from '@testing-library/react';
 import App from './App';
 
-test('renders learn react link', () => {
+test('renders the fitness nutrition dashboard', () => {
   render(<App />);
-  const linkElement = screen.getByText(/learn react/i);
-  expect(linkElement).toBeInTheDocument();
+
+  expect(screen.getByText(/fitness nutrition dashboard/i)).toBeInTheDocument();
+  expect(screen.getByRole('heading', { name: /shape your intake around the training day/i })).toBeInTheDocument();
+  expect(screen.getByRole('button', { name: /show bottle status/i })).toBeInTheDocument();
 });
