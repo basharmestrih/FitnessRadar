@@ -38,33 +38,7 @@ function getWebSocketUrl() {
   return `${protocol}://${hostname}:8080`;
 }
 
-function parseBottleMessage(rawMessage) {
-  const normalized = rawMessage.trim().replace(/\s+/g, ' ');
-  const match = normalized.match(
-    /(milk|protein)\s*bottle\s*(\d+)\s*(available|consumed)/i
-  );
 
-  if (!match) {
-    return null;
-  }
-
-  const type = match[1].toLowerCase();
-  const id = Number(match[2]);
-  const available = match[3].toLowerCase() === 'available';
-  const { calories, count, label } = BOTTLE_META[type];
-
-  if (!Number.isInteger(id) || id < 1 || id > count) {
-    return null;
-  }
-
-  return {
-    type,
-    id,
-    available,
-    calories,
-    name: `${label} Bottle ${id}`,
-  };
-}
 
 export function useBottleData() {
   const [slot, setSlot] = useState(createInitialSlots);
@@ -85,7 +59,7 @@ useEffect(() => {
     milk: Array.from({ length: MILK_COUNT }, (_, index) => ({
       id: index + 1,
       calories: BOTTLE_META.milk.calories,
-      available: index < 4, // ✅ first 4 available, last one consumed
+      available: index < 4, 
     })),
     protein: Array.from({ length: PROTEIN_COUNT }, (_, index) => ({
       id: index + 1,
