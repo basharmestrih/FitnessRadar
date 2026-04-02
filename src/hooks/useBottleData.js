@@ -74,7 +74,6 @@ export function useBottleData() {
   const [connectionError, setConnectionError] = useState('');
   const reconnectTimerRef = useRef(null);
   const dailyRef = useRef([]);
-  const USE_MOCK = true;
 
   const websocketUrl = useMemo(() => getWebSocketUrl(), []);
 
@@ -83,7 +82,6 @@ export function useBottleData() {
   }, [daily]);
 
 useEffect(() => {
-  if (!USE_MOCK) return;
 
   const staticSlots = {
     milk: Array.from({ length: MILK_COUNT }, (_, index) => ({
