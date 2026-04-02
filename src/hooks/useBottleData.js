@@ -70,9 +70,8 @@ export function useBottleData() {
   const [slot, setSlot] = useState(createInitialSlots);
   const [daily, setDaily] = useState([]);
   const [connectionState, setConnectionState] = useState('connecting');
-  const [lastMessage, setLastMessage] = useState('');
+  
   const [connectionError, setConnectionError] = useState('');
-  const reconnectTimerRef = useRef(null);
   const dailyRef = useRef([]);
 
   const websocketUrl = useMemo(() => getWebSocketUrl(), []);
@@ -82,17 +81,16 @@ export function useBottleData() {
   }, [daily]);
 
 useEffect(() => {
-
   const staticSlots = {
     milk: Array.from({ length: MILK_COUNT }, (_, index) => ({
       id: index + 1,
       calories: BOTTLE_META.milk.calories,
-      available: index !== 4, // first 4 available, last one consumed
+      available: index < 4, // ✅ first 4 available, last one consumed
     })),
     protein: Array.from({ length: PROTEIN_COUNT }, (_, index) => ({
       id: index + 1,
       calories: BOTTLE_META.protein.calories,
-      available: index !== 4,
+      available: index < 4,
     })),
   };
 
@@ -100,7 +98,7 @@ useEffect(() => {
 
   const time = new Date().toLocaleTimeString();
 
-  const staticDaily = [
+  setDaily([
     {
       key: `Milk Bottle 5-${time}`,
       name: 'Milk Bottle 5',
@@ -113,10 +111,9 @@ useEffect(() => {
       calories: BOTTLE_META.protein.calories,
       time,
     },
-  ];
+  ]);
 
-  setDaily(staticDaily);
-  setConnectionState('mocked');
+  setConnectionState('static');
   setConnectionError('');
 }, []);
 
@@ -131,6 +128,6 @@ useEffect(() => {
     websocketUrl,
     connectionState,
     connectionError,
-    lastMessage,
+    
   };
 }
